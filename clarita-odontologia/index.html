@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clarità Odontologia</title>
+    <meta name="description" content="Excelência em odontologia no Cambuí, Campinas. Estética, Endodontia e Clínica Geral.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@300;400;500;700&family=Playfair+Display:wght@400;500;600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --color-bg: #F8F7F4;
+            --color-navy: #0C1929;
+            --color-text: #1C2534;
+            --color-muted: #7A8899;
+            --color-gold: #C4A35A;
+            --color-teal: #3AAFA9;
+            --color-light: #EEF2F7;
+            --color-white: #FFFFFF;
+            /* compat */
+            --color-accent: #3AAFA9;
+            --color-accent-light: #A3E4D7;
+            --color-bg-section: #EEF2F7;
+            --ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
+            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 18px;
+            scroll-padding-top: 100px;
+        }
+
+        @media (min-width: 1400px) {
+            html {
+                font-size: 20px;
+            }
+        }
+
+        /* Prevenir travamentos durante scroll */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        /* Seções com ID para navegação */
+        section[id] {
+            scroll-margin-top: 100px;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        *, *::before, *::after {
+            max-width: 100%;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--color-accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.15s var(--ease-smooth), width 0.3s, height 0.3s;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor.hover {
+            width: 60px;
+            height: 60px;
+            background: rgba(136, 158, 189, 0.1);
+            border-color: transparent;
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--color-accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-bg);
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .preloader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .preloader-logo {
+            font-family: 'Raleway', sans-serif;
+            font-size: clamp(5rem, 12vw, 9rem);
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            overflow: hidden;
+            line-height: 1;
+        }
+
+        .preloader-logo span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(110%);
+            background: linear-gradient(175deg, #9AAB88 0%, #6B7B57 55%, #4E5C3A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .preloader-subtitle {
+            display: flex;
+            gap: 0.55em;
+            margin-top: 0.35rem;
+            overflow: hidden;
+        }
+
+        .preloader-subtitle span {
+            font-family: 'Raleway', sans-serif;
+            font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.28em;
+            color: #89AECB;
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        .preloader-line {
+            width: 0;
+            height: 1px;
+            background: #89AECB;
+            margin: 1rem 0 0.9rem;
+            opacity: 0.55;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1.5rem 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,119,204,0.08);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            transform: translateY(0);
+            transition: transform 0.5s var(--ease-expo), box-shadow 0.3s;
+        }
+
+        .nav.hidden {
+            transform: translateY(-100%);
+        }
+
+        .nav.visible {
+            transform: translateY(0);
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            color: var(--color-text);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-logo a {
+            color: var(--color-text);
+            display: inline-block;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav-link {
+            font-size: 1rem;
+            color: var(--color-navy);
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--color-teal);
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--color-accent);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s var(--ease-expo);
+        }
+
+        .nav-link:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .nav-cta {
+            background: var(--color-gold);
+            border: 1px solid var(--color-gold);
+            color: var(--color-navy);
+            padding: 0.75rem 1.8rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            letter-spacing: 0.04em;
+            transition: all 0.4s var(--ease-expo);
+        }
+
+        .nav-cta:hover {
+            background: var(--color-navy);
+            border-color: var(--color-gold);
+            color: var(--color-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(196,163,90,0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 55fr 45fr;
+            position: relative;
+            overflow: hidden;
+            background: var(--color-bg);
+        }
+
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 120px 5vw 80px 8vw;
+            position: relative;
+            z-index: 2;
+            background: var(--color-navy);
+        }
+
+        /* Decorative dot cluster */
+        .hero-bg-shape {
+            position: absolute;
+            bottom: 5rem;
+            right: 2rem;
+            width: 110px;
+            height: 110px;
+            opacity: 0.18;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero-bg-shape svg { width: 100%; height: 100%; }
+
+        .hero-right {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-right img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            display: block;
+            transition: transform 1s var(--ease-expo);
+        }
+
+        .hero-right:hover img { transform: scale(1.03); }
+
+        /* Funde a foto com o fundo navy do lado esquerdo */
+        .hero-right::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, var(--color-navy) 0%, transparent 35%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Escurece levemente topo e base */
+        .hero-right::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom,
+                rgba(12,25,41,0.25) 0%,
+                transparent 25%,
+                transparent 75%,
+                rgba(12,25,41,0.35) 100%
+            );
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Badge flutuante sobre a foto */
+        .hero-photo-badge {
+            position: absolute;
+            bottom: 2.5rem;
+            right: 2rem;
+            background: rgba(12,25,41,0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(196,163,90,0.35);
+            border-radius: 10px;
+            padding: 1rem 1.4rem;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .hero-photo-badge i {
+            color: var(--color-teal);
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+
+        .hero-photo-badge-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .hero-photo-badge-title {
+            font-size: 0.8rem;
+            color: #ffffff;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-photo-badge-sub {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.04em;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(58,175,169,0.08);
+            border: 1px solid rgba(58,175,169,0.22);
+            color: var(--color-teal);
+            padding: 0.45rem 1.1rem;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0;
+        }
+
+        .hero-badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--color-teal);
+            border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        .hero-content {
+            text-align: left;
+            max-width: 640px;
+            z-index: 2;
+        }
+
+        .hero-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.35em;
+            color: var(--color-gold);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hero-label::before {
+            content: '';
+            display: inline-block;
+            width: 40px;
+            height: 1px;
+            background: var(--color-gold);
+            flex-shrink: 0;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 6.5vw, 5.5rem);
+            font-weight: 400;
+            line-height: 1.06;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--color-teal);
+        }
+
+        .hero-title-line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-title-line span {
+            display: block;
+            transform: translateY(105%);
+        }
+
+        .hero-subtitle {
+            font-size: 1.05rem;
+            color: rgba(255,255,255,0.6);
+            max-width: 500px;
+            margin: 0 0 3rem;
+            opacity: 0;
+            line-height: 1.78;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+            opacity: 0;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--color-navy);
+            color: var(--color-white);
+            padding: 1.05rem 2.25rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 4px;
+            letter-spacing: 0.03em;
+            transition: all 0.45s var(--ease-expo);
+            box-shadow: 0 8px 28px rgba(12,25,41,0.22);
+        }
+
+        .hero-cta:hover {
+            background: var(--color-teal);
+            transform: translateY(-3px);
+            box-shadow: 0 16px 36px rgba(58,175,169,0.32);
+        }
+
+        .hero-cta i { transition: transform 0.3s var(--ease-smooth); }
+        .hero-cta:hover i { transform: translateX(4px); }
+
+        .hero-cta-secondary {
+            font-size: 0.88rem;
+            color: rgba(255,255,255,0.7);
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.25);
+            padding-bottom: 2px;
+            transition: all 0.3s;
+        }
+
+        .hero-cta-secondary:hover {
+            color: var(--color-teal);
+            border-color: var(--color-teal);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 3.5rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0;
+        }
+
+        .hero-stat-num {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            font-weight: 500;
+            color: var(--color-teal);
+            line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+
+        .hero-stat-label {
+            display: block;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.45);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 8vw;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            opacity: 0;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.3s var(--ease-smooth);
+            z-index: 3;
+        }
+
+        .hero-scroll:hover { transform: translateX(5px); }
+
+        .hero-scroll-text {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .hero-scroll-line {
+            width: 50px;
+            height: 1px;
+            background: var(--color-gold);
+            animation: scrollLineH 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollLineH {
+            0%, 100% { transform: scaleX(0); transform-origin: left; }
+            50% { transform: scaleX(1); transform-origin: left; }
+            50.1% { transform-origin: right; }
+            100% { transform: scaleX(0); transform-origin: right; }
+        }
+
+        @keyframes scrollLine {
+            0%, 100% { transform: scaleY(0); transform-origin: top; }
+            50% { transform: scaleY(1); transform-origin: top; }
+            50.1% { transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 10rem 4vw;
+            position: relative;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            color: var(--color-text);
+            line-height: 1.2;
+        }
+
+        .section-desc {
+            font-size: 1rem;
+            color: var(--color-muted);
+            max-width: 400px;
+            line-height: 1.7;
+        }
+
+        /* Especialidades */
+        #especialidades {
+            background: #F8FAFC !important;
+        }
+
+        #especialidades .section-label { color: #0891B2; }
+        #especialidades .section-title { color: #0F172A; }
+        #especialidades .section-desc  { color: #64748B; }
+
+        /* Layout interativo: lista + painel */
+        .esp-interactive {
+            display: grid;
+            grid-template-columns: 42fr 58fr;
+            min-height: 520px;
+            align-items: start;
+        }
+
+        /* Lista esquerda */
+        .esp-list {
+            border-right: 1px solid #E2E8F0;
+            padding-right: 3.5rem;
+        }
+
+        .esp-list-item {
+            display: flex;
+            align-items: baseline;
+            gap: 1.25rem;
+            padding: 1.1rem 0;
+            border-bottom: 1px solid #F1F5F9;
+            cursor: pointer;
+            position: relative;
+            transition: padding-left 0.35s var(--ease-expo);
+        }
+
+        .esp-list-item::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 0;
+            width: 2px; height: 100%;
+            background: #0891B2;
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.35s var(--ease-expo);
+        }
+
+        .esp-list-item:hover,
+        .esp-list-item.active {
+            padding-left: 0.75rem;
+        }
+
+        .esp-list-item:hover::after,
+        .esp-list-item.active::after {
+            transform: scaleY(1);
+        }
+
+        .esp-list-num {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: #CBD5E1;
+            width: 1.75rem;
+            flex-shrink: 0;
+            transition: color 0.3s;
+        }
+
+        .esp-list-item:hover .esp-list-num,
+        .esp-list-item.active .esp-list-num { color: #0891B2; }
+
+        .esp-list-name {
+            font-family: 'DM Sans', sans-serif !important;
+            font-size: 1.15rem !important;
+            font-weight: 700 !important;
+            color: #64748B;
+            letter-spacing: 0.01em;
+            line-height: 1.35;
+            transition: color 0.3s, font-size 0.35s var(--ease-expo);
+        }
+
+        .esp-list-item:hover .esp-list-name,
+        .esp-list-item.active .esp-list-name {
+            color: #0C1929 !important;
+            font-size: 1.35rem !important;
+        }
+
+        /* Painel direito */
+        .esp-detail {
+            padding-left: 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .esp-detail-bg-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 14rem;
+            font-weight: 700;
+            color: #0891B2;
+            opacity: 0.04;
+            position: absolute;
+            top: -2rem; right: -1rem;
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
+            transition: opacity 0.4s;
+        }
+
+        .esp-detail-content {
+            position: relative;
+            z-index: 1;
+            transition: opacity 0.28s ease, transform 0.28s ease;
+        }
+
+        .esp-detail-content.fade-out {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        .esp-detail-label {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: #0891B2;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .esp-detail-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.4rem, 3.8vw, 3.4rem);
+            font-weight: 600;
+            color: #0F172A;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.01em;
+        }
+
+        .esp-detail-divider {
+            width: 40px;
+            height: 1px;
+            background: #0891B2;
+            margin-bottom: 1.5rem;
+        }
+
+        .esp-detail-desc {
+            font-family: 'DM Sans', sans-serif;
+            font-size: clamp(1rem, 1.4vw, 1.15rem);
+            color: #334155;
+            line-height: 1.85;
+            font-weight: 400;
+            max-width: 500px;
+        }
+
+        /* Team Section */
+        .team {
+            background: #1a1f2e;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .team-duo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 90vh;
+        }
+
+        .team-duo-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem 5vw 6rem 6vw;
+        }
+
+        .team-duo-text .section-label {
+            color: var(--color-accent-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .team-duo-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 400;
+            color: #ffffff;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .team-duo-desc {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            max-width: 440px;
+        }
+
+        .team-duo-members {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .team-duo-member {
+            border-left: 2px solid var(--color-accent);
+            padding-left: 1.25rem;
+        }
+
+        .team-duo-member-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: #ffffff;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .team-duo-member-spec {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.05em;
+            line-height: 1.5;
+        }
+
+        .team-duo-member-cro {
+            font-size: 0.72rem;
+            color: var(--color-accent-light);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 0.2rem;
+        }
+
+        .team-duo-photo {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-duo-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+            filter: grayscale(8%);
+            transition: transform 0.8s ease, filter 0.8s ease;
+        }
+
+        .team-duo-photo:hover img {
+            transform: scale(1.03);
+            filter: grayscale(0%);
+        }
+
+        .team-duo-photo::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, #1a1f2e 0%, transparent 30%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-text);
+            color: var(--color-white);
+            padding: 8rem 4vw 4rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 6rem;
+        }
+
+        .footer-brand {
+            max-width: 400px;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-tagline {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.7;
+        }
+
+        .footer-heading {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            color: var(--color-gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-link {
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--color-white);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-copyright {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid rgba(196,163,90,0.4);
+            color: var(--color-gold);
+            font-size: 1.1rem;
+            transition: all 0.3s var(--ease-smooth);
+        }
+
+        .footer-social a:hover {
+            background: var(--color-gold);
+            color: var(--color-navy);
+            border-color: var(--color-gold);
+            transform: translateY(-3px);
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+            z-index: 99;
+            transition: transform 0.3s var(--ease-expo);
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 101;
+            padding: 0.5rem;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--color-text);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            transform: translateY(-100%);
+            transition: transform 0.6s var(--ease-expo);
+        }
+
+        .mobile-nav.active {
+            transform: translateY(0);
+        }
+
+        .mobile-nav a {
+            color: var(--color-white);
+            font-size: 1.5rem;
+            font-weight: 500;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .mobile-nav .mobile-cta {
+            background: var(--color-accent);
+            color: var(--color-white);
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-family: 'DM Sans', sans-serif;
+            border-radius: 0;
+            margin-top: 1rem;
+        }
+
+        /* =============================================
+           RESPONSIVE — TABLET (≤900px)
+        ============================================= */
+        @media (max-width: 900px) {
+            html { font-size: 16px; }
+
+            .hero {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .hero-left {
+                padding: 110px 6vw 60px;
+                min-height: 70vh;
+                grid-row: 1;
+            }
+
+            .hero-right {
+                height: 55vw;
+                min-height: 280px;
+                grid-row: 2;
+            }
+
+            .hero-right::before {
+                background: linear-gradient(to bottom, var(--color-navy) 0%, transparent 30%);
+            }
+
+            .hero-photo-badge {
+                bottom: 1.5rem;
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .section {
+                padding: 6rem 5vw;
+            }
+
+            .footer {
+                padding: 5rem 5vw 3rem;
+            }
+        }
+
+        /* =============================================
+           RESPONSIVE — MOBILE (≤768px)
+        ============================================= */
+        @media (max-width: 768px) {
+            html { font-size: 15px; }
+
+            /* Nav */
+            .nav-links { display: none; }
+            .nav-cta   { display: none; }
+            .mobile-menu-btn { display: block; }
+            .cursor, .cursor-dot { display: none; }
+
+            /* Hero */
+            .hero-left {
+                padding: 100px 5vw 50px;
+            }
+
+            .hero-title {
+                font-size: clamp(2rem, 8vw, 2.8rem);
+            }
+
+            .hero-subtitle {
+                font-size: 0.95rem;
+                margin-bottom: 2rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.2rem;
+            }
+
+            .hero-cta {
+                width: 100%;
+                justify-content: center;
+                padding: 1rem 1.5rem;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+                margin-top: 2.5rem;
+                padding-top: 2rem;
+                flex-wrap: wrap;
+            }
+
+            .hero-stat-num {
+                font-size: 1.8rem;
+            }
+
+            .hero-scroll {
+                display: none;
+            }
+
+            /* Sections */
+            .section {
+                padding: 5rem 5vw;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .section-title {
+                font-size: clamp(1.8rem, 7vw, 2.4rem);
+            }
+
+            .section-desc {
+                max-width: 100%;
+            }
+
+            /* Especialidades */
+            .esp-interactive {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .esp-list {
+                border-right: none;
+                border-bottom: 1px solid #E2E8F0;
+                padding-right: 0;
+                padding-bottom: 1.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .esp-list-item {
+                padding: 0.9rem 0;
+            }
+
+            .esp-list-name {
+                font-size: 1rem !important;
+            }
+
+            .esp-list-item:hover .esp-list-name,
+            .esp-list-item.active .esp-list-name {
+                font-size: 1.1rem !important;
+            }
+
+            .esp-detail {
+                padding-left: 0;
+            }
+
+            .esp-detail-bg-num {
+                font-size: 6rem;
+                top: -1rem;
+                right: 0;
+            }
+
+            .esp-detail-title {
+                font-size: clamp(1.6rem, 6vw, 2.2rem);
+            }
+
+            .esp-detail-desc {
+                font-size: 0.95rem;
+                max-width: 100%;
+            }
+
+            /* Team */
+            .team-duo {
+                grid-template-columns: 1fr;
+            }
+
+            .team-duo-photo {
+                min-height: 65vw;
+                order: -1;
+            }
+
+            .team-duo-photo::before {
+                background: linear-gradient(to bottom, #1a1f2e 0%, transparent 35%);
+            }
+
+            .team-duo-text {
+                padding: 3rem 5vw 4rem;
+            }
+
+            .team-duo-title {
+                font-size: clamp(1.8rem, 6vw, 2.4rem);
+            }
+
+            .team-duo-desc {
+                max-width: 100%;
+            }
+
+            /* Footer */
+            .footer {
+                padding: 4rem 5vw 3rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+                margin-bottom: 3rem;
+            }
+
+            .footer-brand {
+                max-width: 100%;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .footer-social {
+                justify-content: center;
+            }
+
+            /* Preloader */
+            .preloader-logo {
+                font-size: clamp(3rem, 16vw, 5rem);
+            }
+
+            .preloader-subtitle span {
+                font-size: clamp(0.7rem, 3vw, 0.9rem);
+                letter-spacing: 0.2em;
+            }
+        }
+
+        /* =============================================
+           RESPONSIVE — PEQUENO (≤480px)
+        ============================================= */
+        @media (max-width: 480px) {
+            .hero-left {
+                padding: 90px 5vw 40px;
+            }
+
+            .hero-stats {
+                gap: 1.2rem;
+            }
+
+            .hero-stat-num {
+                font-size: 1.5rem;
+            }
+
+            .hero-photo-badge {
+                display: none;
+            }
+
+            .section {
+                padding: 4rem 5vw;
+            }
+
+            .esp-list-name {
+                font-size: 0.95rem !important;
+            }
+
+            .whatsapp-float {
+                width: 52px;
+                height: 52px;
+                font-size: 1.3rem;
+                bottom: 1.5rem;
+                right: 1.5rem;
+            }
+        }
+
+        /* Animation classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.8s var(--ease-expo);
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-logo">
+                <span>C</span><span>l</span><span>a</span><span>r</span><span>i</span><span>t</span><span>à</span>
+            </div>
+            <div class="preloader-line"></div>
+            <div class="preloader-subtitle">
+                <span>O</span><span>d</span><span>o</span><span>n</span><span>t</span><span>o</span><span>l</span><span>o</span><span>g</span><span>i</span><span>a</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="navbar">
+        <div class="nav-logo">
+            <a href="#hero" onclick="scrollToSection('#hero', event)">Clarità</a>
+        </div>
+        <div class="nav-links">
+            <a href="#especialidades" class="nav-link" onclick="scrollToSection('#especialidades', event)">Especialidades</a>
+            <a href="#team" class="nav-link" onclick="scrollToSection('#team', event)">Corpo Clínico</a>
+            <a href="#contato" class="nav-link" onclick="scrollToSection('#contato', event)">Contato</a>
+        </div>
+        <a href="https://wa.me/5519930322261" class="nav-cta" target="_blank" rel="noopener noreferrer">Agendar</a>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#especialidades" onclick="scrollToSection('#especialidades', event); closeMobileMenu();">Especialidades</a>
+        <a href="#team" onclick="scrollToSection('#team', event); closeMobileMenu();">Corpo Clínico</a>
+        <a href="#contato" onclick="scrollToSection('#contato', event); closeMobileMenu();">Contato</a>
+        <a href="https://wa.me/5519930322261" class="mobile-cta" target="_blank" rel="noopener noreferrer" onclick="closeMobileMenu()">
+            <i class="fab fa-whatsapp"></i> Agendar pelo WhatsApp
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+
+        <!-- Lado esquerdo: texto -->
+        <div class="hero-left">
+            <div class="hero-bg-shape">
+                <svg viewBox="0 0 100 100" fill="none">
+                    <circle cx="10" cy="10" r="3" fill="#C4A35A" opacity="0.5"/>
+                    <circle cx="30" cy="10" r="3" fill="#C4A35A" opacity="0.5"/>
+                    <circle cx="50" cy="10" r="3" fill="#C4A35A" opacity="0.5"/>
+                    <circle cx="10" cy="30" r="3" fill="#C4A35A" opacity="0.5"/>
+                    <circle cx="30" cy="30" r="3" fill="#C4A35A" opacity="0.5"/>
+                    <circle cx="50" cy="30" r="3" fill="#C4A35A" opacity="0.5"/>
+                    <circle cx="10" cy="50" r="3" fill="#C4A35A" opacity="0.5"/>
+                    <circle cx="30" cy="50" r="3" fill="#C4A35A" opacity="0.5"/>
+                    <circle cx="50" cy="50" r="3" fill="#C4A35A" opacity="0.5"/>
+                </svg>
+            </div>
+
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    Cambuí · Campinas
+                </div>
+                <p class="hero-label">Odontologia de Excelência</p>
+                <h1 class="hero-title">
+                    <span class="hero-title-line"><span>Muito além da estética:</span></span>
+                    <span class="hero-title-line"><span>a arte de cuidar do</span></span>
+                    <span class="hero-title-line"><span>seu sorriso com <em>excelência.</em></span></span>
+                </h1>
+                <p class="hero-subtitle">No coração do Cambuí, unimos tecnologia de ponta, microscopia de alta precisão e um atendimento verdadeiramente humanizado para transformar a sua experiência no dentista.</p>
+                <div class="hero-actions">
+                    <a href="https://wa.me/5519930322261" class="hero-cta" target="_blank">
+                        Agendar Avaliação
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="#especialidades" class="hero-cta-secondary" onclick="scrollToSection('#especialidades', event)">
+                        Conhecer Tratamentos <i class="fas fa-arrow-down"></i>
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <span class="hero-stat-num">+15</span>
+                        <span class="hero-stat-label">Anos transformando sorrisos e resgatando a autoestima</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-num">9</span>
+                        <span class="hero-stat-label">Especialidades integradas para um cuidado completo</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-num"><i class="fas fa-microscope" style="font-size:1.6rem"></i></span>
+                        <span class="hero-stat-label">Microscopia de alta precisão para tratamentos seguros</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lado direito: foto -->
+        <div class="hero-right">
+            <img src="clinica.jpg" alt="Dra. Tatiana realizando procedimento com microscópio — Clarità Odontologia">
+            <div class="hero-photo-badge">
+                <i class="fas fa-microscope"></i>
+                <div class="hero-photo-badge-text">
+                    <span class="hero-photo-badge-title">Microscopia de Alta Precisão</span>
+                    <span class="hero-photo-badge-sub">Endodontia com tecnologia de ponta</span>
+                </div>
+            </div>
+        </div>
+
+        <a href="#especialidades" class="hero-scroll" onclick="scrollToSection('#especialidades', event)" aria-label="Rolar para especialidades">
+            <span class="hero-scroll-text">Scroll</span>
+            <div class="hero-scroll-line"></div>
+        </a>
+    </section>
+
+    <!-- Especialidades Section -->
+    <section class="section" id="especialidades">
+        <div class="section-header">
+            <div>
+                <p class="section-label">Serviços</p>
+                <h2 class="section-title">Nossas Especialidades</h2>
+            </div>
+            <p class="section-desc">Cuidado sob medida para a saúde e beleza do seu sorriso.</p>
+        </div>
+
+        <div class="esp-interactive" id="espInteractive">
+
+            <!-- Lista esquerda -->
+            <div class="esp-list">
+                <div class="esp-list-item active" data-index="0">
+                    <span class="esp-list-num">01</span>
+                    <span class="esp-list-name">Estética e Dentística Restauradora</span>
+                </div>
+                <div class="esp-list-item" data-index="1">
+                    <span class="esp-list-num">02</span>
+                    <span class="esp-list-name">Endodontia — Tratamento de Canal</span>
+                </div>
+                <div class="esp-list-item" data-index="2">
+                    <span class="esp-list-num">03</span>
+                    <span class="esp-list-name">Periodontia</span>
+                </div>
+                <div class="esp-list-item" data-index="3">
+                    <span class="esp-list-num">04</span>
+                    <span class="esp-list-name">Reabilitação Protética</span>
+                </div>
+                <div class="esp-list-item" data-index="4">
+                    <span class="esp-list-num">05</span>
+                    <span class="esp-list-name">Implantodontia</span>
+                </div>
+                <div class="esp-list-item" data-index="5">
+                    <span class="esp-list-num">06</span>
+                    <span class="esp-list-name">Ortodontia</span>
+                </div>
+                <div class="esp-list-item" data-index="6">
+                    <span class="esp-list-num">07</span>
+                    <span class="esp-list-name">DTM e Bruxismo</span>
+                </div>
+                <div class="esp-list-item" data-index="7">
+                    <span class="esp-list-num">08</span>
+                    <span class="esp-list-name">Cirurgia Oral Menor</span>
+                </div>
+                <div class="esp-list-item" data-index="8">
+                    <span class="esp-list-num">09</span>
+                    <span class="esp-list-name">Laserterapia</span>
+                </div>
+            </div>
+
+            <!-- Painel direito -->
+            <div class="esp-detail">
+                <span class="esp-detail-bg-num" id="espBgNum">01</span>
+                <div class="esp-detail-content" id="espDetailContent">
+                    <span class="esp-detail-label">Especialidade</span>
+                    <h3 class="esp-detail-title" id="espDetailTitle">Estética e Dentística Restauradora</h3>
+                    <div class="esp-detail-divider"></div>
+                    <p class="esp-detail-desc" id="espDetailDesc">Devolvemos a harmonia e o brilho do seu sorriso. Facetas, lentes e restaurações feitas com rigor artístico para um resultado natural, elegante e duradouro.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="team-duo">
+            <div class="team-duo-text">
+                <p class="section-label">Corpo Clínico</p>
+                <h2 class="team-duo-title">Duas especialistas.<br>Um só propósito.</h2>
+                <p class="team-duo-desc">Acreditamos que a excelência técnica só faz sentido quando acompanhada de empatia. Com formação rigorosa e anos de experiência, a Dra. Lucia e a Dra. Tatiana unem expertise técnica e sensibilidade humana. Nosso compromisso é entregar tratamentos éticos, precisos e desenhados exclusivamente para a sua necessidade.</p>
+
+                <div class="team-duo-members">
+                    <div class="team-duo-member">
+                        <p class="team-duo-member-name">Dra. Lucia M. Paz Neves</p>
+                        <p class="team-duo-member-spec">Especialista em Estética Dental, Laserterapia e Clínica Geral</p>
+                        <p class="team-duo-member-cro">CRO 81 477</p>
+                    </div>
+                    <div class="team-duo-member">
+                        <p class="team-duo-member-name">Dra. Tatiana Normanha</p>
+                        <p class="team-duo-member-spec">Especialista em Endodontia com foco em Microscopia e Clínica Geral</p>
+                        <p class="team-duo-member-cro">CRO 72 135</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="team-duo-photo">
+                <img src="dupla2.jpg" alt="Dra. Lucia e Dra. Tatiana — Clarità Odontologia">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contato">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3 class="footer-logo">Clarità</h3>
+                <p class="footer-tagline">Excelência odontológica no Cambuí. Agende sua visita e descubra como um atendimento focado em tecnologia, conforto e respeito pode transformar o seu sorriso.</p>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Contato</h4>
+                <a href="tel:+551930322261" class="footer-link">(19) 3032 2261</a>
+                <a href="tel:+551933262261" class="footer-link">(19) 3326 2261</a>
+                <a href="mailto:contato@claritaodontologia.com.br?subject=Contato pelo site" class="footer-link">contato@claritaodontologia.com.br</a>
+                <a href="https://wa.me/5519930322261" class="footer-link" target="_blank" style="margin-top: 1rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Endereço</h4>
+                <p class="footer-link" style="line-height: 1.7;">
+                    Rua Antônio Lapa, 178<br>
+                    Ed. Wall Street, Conj. 406/407<br>
+                    Cambuí, Campinas - SP<br>
+                    CEP 13025-240
+                </p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="footer-copyright">© 2024 Clarità Odontologia. Todos os direitos reservados.</p>
+            <div class="footer-social">
+                <a href="https://www.instagram.com/clarita_odontologia?igsh=MW1pdnBneTA1MjVmag==" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=100057240977659" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/5519930322261" class="whatsapp-float" target="_blank" aria-label="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // ========================================
+        // NAVEGAÇÃO SUAVE - Sem travamentos
+        // ========================================
+        function scrollToSection(targetSelector, event) {
+            if (event) event.preventDefault();
+
+            const target = document.querySelector(targetSelector);
+            if (!target) return;
+
+            // Fechar menu mobile se estiver aberto
+            const mobileNav = document.getElementById('mobileNav');
+            if (mobileNav && mobileNav.classList.contains('active')) {
+                closeMobileMenu();
+                // Pequeno delay para o menu fechar antes de scrollar
+                setTimeout(() => {
+                    performScroll(target);
+                }, 300);
+            } else {
+                performScroll(target);
+            }
+        }
+
+        function performScroll(target) {
+            const headerOffset = 100; // Aumentado para compensar o nav escondido
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+
+            // Usar scroll nativo sempre - mais suave e confiável
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+        }
+
+        function closeMobileMenu() {
+            const mobileNav = document.getElementById('mobileNav');
+            const menuBtn = document.getElementById('mobileMenuBtn');
+
+            if (mobileNav && mobileNav.classList.contains('active')) {
+                mobileNav.classList.remove('active');
+                document.body.style.overflow = '';
+
+                if (menuBtn) {
+                    menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            }
+        }
+
+        // ========================================
+        // MOBILE MENU
+        // ========================================
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+
+        if (mobileMenuBtn && mobileNav) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileNav.classList.toggle('active');
+
+                if (mobileNav.classList.contains('active')) {
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Fechar menu ao clicar em links
+            mobileNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    closeMobileMenu();
+                });
+            });
+
+            // Fechar ao pressionar ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+                    closeMobileMenu();
+                }
+            });
+        }
+
+        // ========================================
+        // GSAP ANIMATIONS (se disponível)
+        // ========================================
+        if (typeof gsap !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+            if (typeof ScrollToPlugin !== 'undefined') {
+                gsap.registerPlugin(ScrollToPlugin);
+            }
+
+            // Preloader Animation
+            const preloaderTimeline = gsap.timeline();
+
+            preloaderTimeline
+                .to('.preloader-logo span', {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.5,
+                    stagger: 0.18,
+                    ease: 'expo.out'
+                })
+                .to('.preloader-subtitle span', {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.0,
+                    stagger: 0.07,
+                    ease: 'expo.out'
+                }, '-=0.6')
+                .to('.preloader-line', {
+                    width: '100%',
+                    duration: 1.2,
+                    ease: 'expo.inOut'
+                }, '-=0.5')
+                .to('.preloader', {
+                    yPercent: -100,
+                    duration: 1.4,
+                    ease: 'expo.inOut',
+                    delay: 0.7
+                })
+                .set('.preloader', { display: 'none' })
+                // Hero animations
+                .to('.hero-badge', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.0,
+                    ease: 'expo.out'
+                }, '-=0.4')
+                .to('.hero-label', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'expo.out'
+                }, '-=0.7')
+                .to('.hero-title-line span', {
+                    y: 0,
+                    duration: 1.8,
+                    stagger: 0.18,
+                    ease: 'expo.out'
+                }, '-=0.8')
+                .to('.hero-subtitle', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.3,
+                    ease: 'expo.out'
+                }, '-=0.9')
+                .to('.hero-actions', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'expo.out'
+                }, '-=0.7')
+                .to('.hero-stats', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'expo.out'
+                }, '-=0.6')
+                .to('.hero-scroll', {
+                    opacity: 1,
+                    duration: 1.0
+                }, '-=0.5');
+
+            // Hero parallax on scroll
+            gsap.to('.hero-content', {
+                y: 200,
+                opacity: 0,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+
+            // Section reveals
+            gsap.utils.toArray('.section-header').forEach(header => {
+                gsap.from(header, {
+                    y: 50,
+                    opacity: 0,
+                    duration: 1,
+                    ease: 'expo.out',
+                    scrollTrigger: {
+                        trigger: header,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+            });
+
+            // Especialidades cards stagger
+            gsap.from('.especialidade-card', {
+                x: 100,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2,
+                ease: 'expo.out',
+                scrollTrigger: {
+                    trigger: '#especialidades',
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+
+            // Team cards animation
+            gsap.from('.team-card', {
+                y: 100,
+                opacity: 0,
+                duration: 1.2,
+                stagger: 0.3,
+                ease: 'expo.out',
+                scrollTrigger: {
+                    trigger: '.team',
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        } else {
+            // Fallback sem GSAP - mostrar conteúdo imediatamente
+            document.querySelector('.preloader')?.style.setProperty('display', 'none');
+            document.querySelectorAll('.hero-badge, .hero-label, .hero-subtitle, .hero-actions, .hero-stats, .hero-scroll').forEach(el => {
+                el.style.opacity = '1';
+            });
+            document.querySelectorAll('.hero-title-line span').forEach(el => {
+                el.style.transform = 'translateY(0)';
+            });
+            document.querySelectorAll('.preloader-subtitle span').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            });
+        }
+
+        // ========================================
+        // CUSTOM CURSOR (desktop apenas)
+        // ========================================
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+
+        if (cursor && cursorDot && window.matchMedia('(pointer: fine)').matches) {
+            let mouseX = 0, mouseY = 0;
+            let cursorX = 0, cursorY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+
+                cursorDot.style.left = mouseX + 'px';
+                cursorDot.style.top = mouseY + 'px';
+            });
+
+            function animateCursor() {
+                cursorX += (mouseX - cursorX) * 0.1;
+                cursorY += (mouseY - cursorY) * 0.1;
+
+                cursor.style.left = cursorX + 'px';
+                cursor.style.top = cursorY + 'px';
+
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // Cursor hover effect
+            const hoverElements = document.querySelectorAll('a, button, .team-card, .especialidade-card, .nav-cta');
+            hoverElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+        } else if (cursor && cursorDot) {
+            // Esconder cursor customizado em dispositivos touch
+            cursor.style.display = 'none';
+            cursorDot.style.display = 'none';
+        }
+
+        // ========================================
+        // NAV RETRÁTIL - Esconde ao descer, aparece ao subir
+        // ========================================
+        const nav = document.getElementById('navbar');
+        let lastScroll = 0;
+        let scrollThreshold = 100;
+
+        function updateNavOnScroll() {
+            const currentScroll = window.pageYOffset;
+
+            // Determinar direção do scroll
+            if (currentScroll > lastScroll && currentScroll > scrollThreshold) {
+                // Scroll DESCENDO - esconder nav
+                nav.classList.add('hidden');
+                nav.classList.remove('visible');
+            } else {
+                // Scroll SUBINDO - mostrar nav
+                nav.classList.remove('hidden');
+                nav.classList.add('visible');
+            }
+
+            // Estilo baseado na posição
+            if (currentScroll > 100) {
+                nav.style.mixBlendMode = 'normal';
+                nav.style.background = 'rgba(250, 250, 249, 0.98)';
+                nav.style.backdropFilter = 'blur(20px)';
+                nav.style.webkitBackdropFilter = 'blur(20px)';
+                nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.05)';
+                nav.querySelector('.nav-logo a').style.color = 'var(--color-text)';
+                nav.querySelectorAll('.nav-link').forEach(link => link.style.color = 'var(--color-navy)');
+                const navCta = nav.querySelector('.nav-cta');
+                if (navCta) {
+                    navCta.style.background = 'var(--color-gold)';
+                    navCta.style.color = 'var(--color-navy)';
+                    navCta.style.borderColor = 'var(--color-gold)';
+                }
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.style.color = 'var(--color-text)';
+                }
+            } else {
+                nav.style.mixBlendMode = 'normal';
+                nav.style.background = 'rgba(12,25,41,0.75)';
+                nav.style.backdropFilter = 'blur(12px)';
+                nav.style.webkitBackdropFilter = 'blur(12px)';
+                nav.style.boxShadow = 'none';
+                nav.querySelector('.nav-logo a').style.color = 'var(--color-white)';
+                nav.querySelectorAll('.nav-link').forEach(link => link.style.color = 'rgba(255,255,255,0.85)');
+                const navCta = nav.querySelector('.nav-cta');
+                if (navCta) {
+                    navCta.style.background = 'var(--color-gold)';
+                    navCta.style.color = 'var(--color-navy)';
+                    navCta.style.borderColor = 'var(--color-gold)';
+                }
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.style.color = 'var(--color-white)';
+                }
+            }
+
+            lastScroll = currentScroll;
+        }
+
+        // Throttle para performance
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    updateNavOnScroll();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+
+        updateNavOnScroll(); // Executar uma vez no load
+
+        // ========================================
+        // HORIZONTAL SCROLL ESPECIALIDADES
+        // ========================================
+        const track = document.getElementById('especialidadesTrack');
+        const container = document.querySelector('.especialidades-container');
+
+        if (track && container) {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            track.addEventListener('mousedown', (e) => {
+                isDown = true;
+                track.style.cursor = 'grabbing';
+                startX = e.pageX - container.offsetLeft;
+                scrollLeft = container.scrollLeft;
+            });
+
+            track.addEventListener('mouseleave', () => {
+                isDown = false;
+                track.style.cursor = 'grab';
+            });
+
+            track.addEventListener('mouseup', () => {
+                isDown = false;
+                track.style.cursor = 'grab';
+            });
+
+            track.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - container.offsetLeft;
+                const walk = (x - startX) * 2;
+                container.scrollLeft = scrollLeft - walk;
+            });
+
+            // Touch events para mobile
+            track.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].pageX - container.offsetLeft;
+                scrollLeft = container.scrollLeft;
+            }, { passive: true });
+
+            track.addEventListener('touchmove', (e) => {
+                const x = e.touches[0].pageX - container.offsetLeft;
+                const walk = (x - startX) * 2;
+                container.scrollLeft = scrollLeft - walk;
+            }, { passive: true });
+        }
+
+        // ========================================
+        // TEAM CARD TILT EFFECT (desktop)
+        // ========================================
+        const teamCards = document.querySelectorAll('.team-card');
+
+        if (window.matchMedia('(pointer: fine)').matches) {
+            teamCards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+                });
+            });
+        }
+
+        // ========================================
+        // MOUSE PARALLAX HERO (desktop)
+        // ========================================
+        const heroShape = document.querySelector('.hero-bg-shape');
+
+        if (heroShape && typeof gsap !== 'undefined' && window.matchMedia('(pointer: fine)').matches) {
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth - 0.5) * 30;
+                const y = (e.clientY / window.innerHeight - 0.5) * 30;
+
+                gsap.to(heroShape, {
+                    x: x,
+                    y: y,
+                    duration: 1,
+                    ease: 'power2.out'
+                });
+            });
+        }
+
+        // ========================================
+        // PREVENIR CONFLITO COM GSAP SCROLLTRIGGER
+        // ========================================
+        // Desabilitar scroll smoothing do ScrollTrigger durante navegação manual
+        ScrollTrigger.defaults({
+            autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
+        });
+
+        // ========================================
+        // VERIFICAÇÃO DE LINKS EXTERNOS
+        // ========================================
+        // Abrir todos os links externos em nova aba
+        document.querySelectorAll('a[href^="http"]').forEach(link => {
+            if (!link.hasAttribute('target')) {
+                link.setAttribute('target', '_blank');
+                link.setAttribute('rel', 'noopener noreferrer');
+            }
+        });
+
+        // ========================================
+        // ESPECIALIDADES INTERATIVAS — Layout assimétrico
+        // ========================================
+        const espData = [
+            {
+                num: '01',
+                title: 'Estética e Dentística Restauradora',
+                desc: 'Devolvemos a harmonia e o brilho do seu sorriso. Facetas, lentes e restaurações feitas com rigor artístico para um resultado natural, elegante e duradouro.'
+            },
+            {
+                num: '02',
+                title: 'Endodontia — Tratamento de Canal',
+                desc: 'O fim do mito da dor. Tratamentos seguros e confortáveis com microscopia de última geração para preservar ao máximo o seu dente natural.'
+            },
+            {
+                num: '03',
+                title: 'Periodontia',
+                desc: 'O alicerce de um sorriso saudável. Tratamos a saúde das suas gengivas para prevenir doenças, garantir dentes firmes e um hálito sempre fresco.'
+            },
+            {
+                num: '04',
+                title: 'Reabilitação Protética',
+                desc: 'Recupere o prazer de mastigar e sorrir sem medo. Coroas e próteses desenhadas para devolver a função e a estética perfeitas para o seu rosto.'
+            },
+            {
+                num: '05',
+                title: 'Implantodontia',
+                desc: 'A solução definitiva e segura para dentes perdidos. Implantes modernos que parecem, funcionam e oferecem o mesmo conforto dos dentes naturais.'
+            },
+            {
+                num: '06',
+                title: 'Ortodontia',
+                desc: 'O alinhamento perfeito, do seu jeito. Desde os eficientes aparelhos convencionais até os modernos e discretos alinhadores invisíveis.'
+            },
+            {
+                num: '07',
+                title: 'DTM e Bruxismo',
+                desc: 'Alívio para dores de cabeça e tensões no maxilar. Diagnóstico preciso para proteger seus dentes do desgaste e devolver sua qualidade de vida.'
+            },
+            {
+                num: '08',
+                title: 'Cirurgia Oral Menor',
+                desc: 'Procedimentos cirúrgicos com técnicas minimamente invasivas, garantindo segurança e uma recuperação rápida e tranquila.'
+            },
+            {
+                num: '09',
+                title: 'Laserterapia',
+                desc: 'Tecnologia a favor do seu bem-estar. Tratamentos modernos e indolores para acelerar a cicatrização, aliviar a sensibilidade e cuidar da sua boca.'
+            }
+        ];
+
+        const espItems    = document.querySelectorAll('.esp-list-item');
+        const espContent  = document.getElementById('espDetailContent');
+        const espTitle    = document.getElementById('espDetailTitle');
+        const espDesc     = document.getElementById('espDetailDesc');
+        const espBgNum    = document.getElementById('espBgNum');
+
+        let currentIndex = 0;
+        let switchTimeout = null;
+
+        function switchEspecialidade(index) {
+            if (index === currentIndex) return;
+
+            espContent.classList.add('fade-out');
+
+            clearTimeout(switchTimeout);
+            switchTimeout = setTimeout(() => {
+                const data = espData[index];
+                espTitle.textContent  = data.title;
+                espDesc.textContent   = data.desc;
+                espBgNum.textContent  = data.num;
+
+                espContent.classList.remove('fade-out');
+                currentIndex = index;
+            }, 280);
+
+            espItems.forEach(item => item.classList.remove('active'));
+            espItems[index].classList.add('active');
+        }
+
+        espItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                switchEspecialidade(parseInt(item.dataset.index));
+            });
+            item.addEventListener('click', () => {
+                switchEspecialidade(parseInt(item.dataset.index));
+            });
+        });
+
+        // Entrada animada da seção
+        if (typeof gsap !== 'undefined') {
+            gsap.from('.esp-list-item', {
+                x: -30,
+                opacity: 0,
+                duration: 0.7,
+                stagger: 0.07,
+                ease: 'expo.out',
+                scrollTrigger: {
+                    trigger: '#especialidades',
+                    start: 'top 65%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+            gsap.from('.esp-detail-content', {
+                x: 40,
+                opacity: 0,
+                duration: 1,
+                ease: 'expo.out',
+                scrollTrigger: {
+                    trigger: '#especialidades',
+                    start: 'top 65%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // ========================================
+        // CONSOLE WELCOME
+        // ========================================
+        console.log('%c Clarità Odontologia ', 'background: #889EBD; color: white; font-size: 20px; padding: 10px; border-radius: 4px;');
+        console.log('%c Excelência em odontologia no Cambuí ', 'color: #4A5248; font-size: 14px;');
+        console.log('%c Todos os botões estão funcionando! 🦷 ', 'color: #889EBD; font-size: 12px;');
+    </script>
+</body>
+</html>
