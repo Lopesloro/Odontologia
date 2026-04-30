@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clarità Odontologia</title>
+    <meta name="description" content="Excelência em odontologia no Cambuí, Campinas. Estética, Endodontia e Clínica Geral.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --color-bg: #FFFFFF;
+            --color-text: #333333;
+            --color-muted: #6B7280;
+            --color-accent: #0077CC;
+            --color-accent-light: #A3E4D7;
+            --color-bg-section: #F4F7F6;
+            --color-white: #FFFFFF;
+            --ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
+            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 18px;
+            scroll-padding-top: 100px;
+        }
+
+        @media (min-width: 1400px) {
+            html {
+                font-size: 20px;
+            }
+        }
+
+        /* Prevenir travamentos durante scroll */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        /* Seções com ID para navegação */
+        section[id] {
+            scroll-margin-top: 100px;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--color-accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.15s var(--ease-smooth), width 0.3s, height 0.3s;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor.hover {
+            width: 60px;
+            height: 60px;
+            background: rgba(136, 158, 189, 0.1);
+            border-color: transparent;
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--color-accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-bg);
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .preloader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .preloader-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--color-text);
+            overflow: hidden;
+        }
+
+        .preloader-logo span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        .preloader-subtitle {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--color-muted);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .preloader-line {
+            width: 0;
+            height: 1px;
+            background: var(--color-accent);
+            margin-top: 1.5rem;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1.5rem 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,119,204,0.08);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            transform: translateY(0);
+            transition: transform 0.5s var(--ease-expo), box-shadow 0.3s;
+        }
+
+        .nav.hidden {
+            transform: translateY(-100%);
+        }
+
+        .nav.visible {
+            transform: translateY(0);
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            color: var(--color-text);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-logo a {
+            color: var(--color-text);
+            display: inline-block;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--color-accent);
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--color-accent);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s var(--ease-expo);
+        }
+
+        .nav-link:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .nav-cta {
+            background: var(--color-accent);
+            border: none;
+            color: var(--color-white);
+            padding: 0.75rem 1.75rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.4s var(--ease-expo);
+            box-shadow: 0 4px 15px rgba(0,119,204,0.3);
+        }
+
+        .nav-cta:hover {
+            background: #005fa3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,119,204,0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 0 4vw;
+            background: linear-gradient(160deg, #f0f8ff 0%, #ffffff 40%, #f4fbf8 100%);
+        }
+
+        .hero-bg-shape {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        .hero-bg-shape svg {
+            width: 100%;
+            height: 100%;
+            animation: rotate 60s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            z-index: 1;
+        }
+
+        .hero-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--color-muted);
+            margin-bottom: 2rem;
+            opacity: 0;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .hero-title-line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-title-line span {
+            display: block;
+            transform: translateY(100%);
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-muted);
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            opacity: 0;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--color-accent);
+            color: var(--color-white);
+            padding: 1.1rem 2.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 50px;
+            letter-spacing: 0.02em;
+            transition: all 0.4s var(--ease-expo);
+            opacity: 0;
+            box-shadow: 0 6px 24px rgba(0,119,204,0.35);
+        }
+
+        .hero-cta:hover {
+            background: #005fa3;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0,119,204,0.45);
+        }
+
+        .hero-cta i {
+            transition: transform 0.3s var(--ease-smooth);
+        }
+
+        .hero-cta:hover i {
+            transform: translateX(4px);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.3s var(--ease-smooth);
+        }
+
+        .hero-scroll:hover {
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        .hero-scroll-text {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--color-muted);
+        }
+
+        .hero-scroll-line {
+            width: 1px;
+            height: 60px;
+            background: var(--color-accent);
+            animation: scrollLine 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollLine {
+            0%, 100% { transform: scaleY(0); transform-origin: top; }
+            50% { transform: scaleY(1); transform-origin: top; }
+            50.1% { transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 10rem 4vw;
+            position: relative;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            color: var(--color-text);
+            line-height: 1.2;
+        }
+
+        .section-desc {
+            font-size: 1rem;
+            color: var(--color-muted);
+            max-width: 400px;
+            line-height: 1.7;
+        }
+
+        /* Especialidades - Horizontal Scroll */
+        .esp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .esp-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 2.5rem 2rem;
+            position: relative;
+            transition: transform 0.45s var(--ease-expo), box-shadow 0.45s var(--ease-expo);
+            cursor: default;
+            box-shadow: 6px 6px 18px rgba(0,0,0,0.07), -3px -3px 10px rgba(255,255,255,0.95);
+            border: 1px solid rgba(255,255,255,0.9);
+        }
+
+        .esp-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 10px 20px 40px rgba(0,119,204,0.13), -3px -3px 10px rgba(255,255,255,0.95);
+            border-color: rgba(0,119,204,0.12);
+        }
+
+        .esp-card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s var(--ease-smooth);
+        }
+
+        .esp-card:hover .esp-card-icon {
+            transform: scale(1.1);
+        }
+
+        .esp-card-icon.blue {
+            background: rgba(0,119,204,0.1);
+            color: #0077CC;
+        }
+
+        .esp-card-icon.teal {
+            background: rgba(163,228,215,0.35);
+            color: #1a9e82;
+        }
+
+        .esp-card-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--color-text);
+            line-height: 1.3;
+            margin-bottom: 0.75rem;
+        }
+
+        .esp-card-desc {
+            font-size: 0.85rem;
+            color: var(--color-muted);
+            line-height: 1.65;
+        }
+
+        /* Team Section */
+        .team {
+            background: #1a1f2e;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .team-duo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 90vh;
+        }
+
+        .team-duo-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem 5vw 6rem 6vw;
+        }
+
+        .team-duo-text .section-label {
+            color: var(--color-accent-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .team-duo-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 400;
+            color: #ffffff;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .team-duo-desc {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            max-width: 440px;
+        }
+
+        .team-duo-members {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .team-duo-member {
+            border-left: 2px solid var(--color-accent);
+            padding-left: 1.25rem;
+        }
+
+        .team-duo-member-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: #ffffff;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .team-duo-member-spec {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.05em;
+            line-height: 1.5;
+        }
+
+        .team-duo-member-cro {
+            font-size: 0.72rem;
+            color: var(--color-accent-light);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 0.2rem;
+        }
+
+        .team-duo-photo {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-duo-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+            filter: grayscale(8%);
+            transition: transform 0.8s ease, filter 0.8s ease;
+        }
+
+        .team-duo-photo:hover img {
+            transform: scale(1.03);
+            filter: grayscale(0%);
+        }
+
+        .team-duo-photo::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, #1a1f2e 0%, transparent 30%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-text);
+            color: var(--color-white);
+            padding: 8rem 4vw 4rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 6rem;
+        }
+
+        .footer-brand {
+            max-width: 400px;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-tagline {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.7;
+        }
+
+        .footer-heading {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-link {
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--color-white);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-copyright {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-social a {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.25rem;
+            transition: color 0.3s;
+        }
+
+        .footer-social a:hover {
+            color: var(--color-white);
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+            z-index: 99;
+            transition: transform 0.3s var(--ease-expo);
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 101;
+            padding: 0.5rem;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--color-text);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            transform: translateY(-100%);
+            transition: transform 0.6s var(--ease-expo);
+        }
+
+        .mobile-nav.active {
+            transform: translateY(0);
+        }
+
+        .mobile-nav a {
+            color: var(--color-white);
+            font-size: 1.5rem;
+            font-weight: 500;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .mobile-nav .mobile-cta {
+            background: var(--color-accent);
+            color: var(--color-white);
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-family: 'DM Sans', sans-serif;
+            border-radius: 0;
+            margin-top: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .esp-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 601px) and (max-width: 900px) {
+            .esp-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-cta {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .team-duo {
+                grid-template-columns: 1fr;
+            }
+
+            .team-duo-photo {
+                min-height: 60vw;
+                order: -1;
+            }
+
+            .team-duo-photo::before {
+                background: linear-gradient(to bottom, #1a1f2e 0%, transparent 30%);
+            }
+
+            .team-duo-text {
+                padding: 3rem 5vw;
+            }
+
+            .esp-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cursor, .cursor-dot {
+                display: none;
+            }
+        }
+
+        /* Animation classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.8s var(--ease-expo);
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-logo">
+                <span>C</span><span>l</span><span>a</span><span>r</span><span>i</span><span>t</span><span>à</span>
+            </div>
+            <div class="preloader-subtitle">Odontologia</div>
+        </div>
+        <div class="preloader-line"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="navbar">
+        <div class="nav-logo">
+            <a href="#hero" onclick="scrollToSection('#hero', event)">Clarità</a>
+        </div>
+        <div class="nav-links">
+            <a href="#especialidades" class="nav-link" onclick="scrollToSection('#especialidades', event)">Especialidades</a>
+            <a href="#team" class="nav-link" onclick="scrollToSection('#team', event)">Corpo Clínico</a>
+            <a href="#contato" class="nav-link" onclick="scrollToSection('#contato', event)">Contato</a>
+        </div>
+        <a href="https://wa.me/5519981314626" class="nav-cta" target="_blank" rel="noopener noreferrer">Agendar</a>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#especialidades" onclick="scrollToSection('#especialidades', event); closeMobileMenu();">Especialidades</a>
+        <a href="#team" onclick="scrollToSection('#team', event); closeMobileMenu();">Corpo Clínico</a>
+        <a href="#contato" onclick="scrollToSection('#contato', event); closeMobileMenu();">Contato</a>
+        <a href="https://wa.me/5519930322261" class="mobile-cta" target="_blank" rel="noopener noreferrer" onclick="closeMobileMenu()">
+            <i class="fab fa-whatsapp"></i> Agendar pelo WhatsApp
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg-shape">
+            <svg viewBox="0 0 200 200">
+                <path fill="currentColor" d="M100,10 C120,10 140,30 150,60 C160,90 140,120 100,140 C60,120 40,90 50,60 C60,30 80,10 100,10 Z"/>
+            </svg>
+        </div>
+
+        <div class="hero-content">
+            <p class="hero-label">Odontologia de Excelência</p>
+            <h1 class="hero-title">
+                <span class="hero-title-line"><span>Excelência em</span></span>
+                <span class="hero-title-line"><span>Odontologia</span></span>
+                <span class="hero-title-line"><span>no Cambuí</span></span>
+            </h1>
+            <p class="hero-subtitle">Cuidado especializado em Estética, Endodontia e Clínica Geral, unindo tecnologia avançada e conforto para o seu sorriso.</p>
+            <a href="https://wa.me/5519930322261" class="hero-cta" target="_blank">
+                Agendar Consulta
+                <i class="fab fa-whatsapp"></i>
+            </a>
+        </div>
+
+        <a href="#especialidades" class="hero-scroll" onclick="scrollToSection('#especialidades', event)" aria-label="Rolar para especialidades">
+            <span class="hero-scroll-text">Scroll</span>
+            <div class="hero-scroll-line"></div>
+        </a>
+    </section>
+
+    <!-- Especialidades Section -->
+    <section class="section" id="especialidades" style="background: var(--color-bg-section);">
+        <div class="section-header">
+            <div>
+                <p class="section-label">Serviços</p>
+                <h2 class="section-title">Nossas Especialidades</h2>
+            </div>
+            <p class="section-desc">Cuidado completo para a saúde e beleza do seu sorriso, com tecnologia e dedicação.</p>
+        </div>
+
+        <div class="esp-grid">
+            <div class="esp-card">
+                <div class="esp-card-icon teal"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <h3 class="esp-card-name">Estética e dentística restauradora</h3>
+                <p class="esp-card-desc">Facetas, clareamento e restaurações com resultado natural, elegante e duradouro.</p>
+            </div>
+            <div class="esp-card">
+                <div class="esp-card-icon blue"><i class="fa-solid fa-microscope"></i></div>
+                <h3 class="esp-card-name">Endodontia</h3>
+                <p class="esp-card-desc">Tratamento de canal com microscopia de alta precisão para preservar seus dentes naturais.</p>
+            </div>
+            <div class="esp-card">
+                <div class="esp-card-icon teal"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3 class="esp-card-name">Periodontia</h3>
+                <p class="esp-card-desc">Saúde e tratamento das gengivas com cuidado especializado e resultados eficazes.</p>
+            </div>
+            <div class="esp-card">
+                <div class="esp-card-icon blue"><i class="fa-solid fa-teeth"></i></div>
+                <h3 class="esp-card-name">Reabilitação Protética</h3>
+                <p class="esp-card-desc">Coroas, próteses fixas e móveis para reabilitar a função e a estética do sorriso.</p>
+            </div>
+            <div class="esp-card">
+                <div class="esp-card-icon teal"><i class="fa-solid fa-syringe"></i></div>
+                <h3 class="esp-card-name">Implantodontia</h3>
+                <p class="esp-card-desc">Implantes modernos que substituem dentes com naturalidade, conforto e segurança.</p>
+            </div>
+            <div class="esp-card">
+                <div class="esp-card-icon blue"><i class="fa-solid fa-teeth-open"></i></div>
+                <h3 class="esp-card-name">Ortodontia</h3>
+                <p class="esp-card-desc">Alinhamento dental com aparelhos convencionais ou alinhadores invisíveis e modernos.</p>
+            </div>
+            <div class="esp-card">
+                <div class="esp-card-icon teal"><i class="fa-solid fa-head-side-medical"></i></div>
+                <h3 class="esp-card-name">DTM</h3>
+                <p class="esp-card-desc">Diagnóstico e tratamento das disfunções da articulação temporomandibular e bruxismo.</p>
+            </div>
+            <div class="esp-card">
+                <div class="esp-card-icon blue"><i class="fa-solid fa-scissors"></i></div>
+                <h3 class="esp-card-name">Cirurgia oral menor</h3>
+                <p class="esp-card-desc">Procedimentos cirúrgicos minimamente invasivos com segurança e recuperação rápida.</p>
+            </div>
+            <div class="esp-card">
+                <div class="esp-card-icon teal"><i class="fa-solid fa-bolt"></i></div>
+                <h3 class="esp-card-name">Laserterapia</h3>
+                <p class="esp-card-desc">Tratamentos modernos com laser de última geração para gengiva, mucosa e bioestimulação.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="team-duo">
+            <div class="team-duo-text">
+                <p class="section-label">Corpo Clínico</p>
+                <h2 class="team-duo-title">Duas especialistas.<br>Um só propósito.</h2>
+                <p class="team-duo-desc">Com formação de excelência e anos de dedicação, nossa equipe une expertise técnica e sensibilidade humana para transformar cada sorriso com cuidado, precisão e arte.</p>
+
+                <div class="team-duo-members">
+                    <div class="team-duo-member">
+                        <p class="team-duo-member-name">Dra. Lucia M. Paz Neves</p>
+                        <p class="team-duo-member-spec">Estética Dental · Laserterapia · Clínica Geral</p>
+                        <p class="team-duo-member-cro">CRO 81 477</p>
+                    </div>
+                    <div class="team-duo-member">
+                        <p class="team-duo-member-name">Dra. Tatiana Normanha</p>
+                        <p class="team-duo-member-spec">Endodontia · Microscopia · Clínica Geral</p>
+                        <p class="team-duo-member-cro">CRO 72 135</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="team-duo-photo">
+                <img src="dupla2.jpg" alt="Dra. Lucia e Dra. Tatiana — Clarità Odontologia">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contato">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3 class="footer-logo">Clarità</h3>
+                <p class="footer-tagline">Excelência em odontologia no coração do Cambuí. Tecnologia, conforto e resultados que transformam sorrisos.</p>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Contato</h4>
+                <a href="tel:+551930322261" class="footer-link">(19) 3032 2261</a>
+                <a href="tel:+551933262261" class="footer-link">(19) 3326 2261</a>
+                <a href="mailto:contato@claritaodontologia.com.br?subject=Contato pelo site" class="footer-link">contato@claritaodontologia.com.br</a>
+                <a href="https://wa.me/5519930322261" class="footer-link" target="_blank" style="margin-top: 1rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Endereço</h4>
+                <p class="footer-link" style="line-height: 1.7;">
+                    Rua Antônio Lapa, 178<br>
+                    Ed. Wall Street, Conj. 406/407<br>
+                    Cambuí, Campinas - SP<br>
+                    CEP 13025-240
+                </p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="footer-copyright">© 2024 Clarità Odontologia. Todos os direitos reservados.</p>
+            <div class="footer-social">
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/5519930322261" class="whatsapp-float" target="_blank" aria-label="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // ========================================
+        // NAVEGAÇÃO SUAVE - Sem travamentos
+        // ========================================
+        function scrollToSection(targetSelector, event) {
+            if (event) event.preventDefault();
+
+            const target = document.querySelector(targetSelector);
+            if (!target) return;
+
+            // Fechar menu mobile se estiver aberto
+            const mobileNav = document.getElementById('mobileNav');
+            if (mobileNav && mobileNav.classList.contains('active')) {
+                closeMobileMenu();
+                // Pequeno delay para o menu fechar antes de scrollar
+                setTimeout(() => {
+                    performScroll(target);
+                }, 300);
+            } else {
+                performScroll(target);
+            }
+        }
+
+        function performScroll(target) {
+            const headerOffset = 100; // Aumentado para compensar o nav escondido
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+
+            // Usar scroll nativo sempre - mais suave e confiável
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+        }
+
+        function closeMobileMenu() {
+            const mobileNav = document.getElementById('mobileNav');
+            const menuBtn = document.getElementById('mobileMenuBtn');
+
+            if (mobileNav && mobileNav.classList.contains('active')) {
+                mobileNav.classList.remove('active');
+                document.body.style.overflow = '';
+
+                if (menuBtn) {
+                    menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            }
+        }
+
+        // ========================================
+        // MOBILE MENU
+        // ========================================
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+
+        if (mobileMenuBtn && mobileNav) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileNav.classList.toggle('active');
+
+                if (mobileNav.classList.contains('active')) {
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Fechar menu ao clicar em links
+            mobileNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    closeMobileMenu();
+                });
+            });
+
+            // Fechar ao pressionar ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+                    closeMobileMenu();
+                }
+            });
+        }
+
+        // ========================================
+        // GSAP ANIMATIONS (se disponível)
+        // ========================================
+        if (typeof gsap !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+            if (typeof ScrollToPlugin !== 'undefined') {
+                gsap.registerPlugin(ScrollToPlugin);
+            }
+
+            // Preloader Animation
+            const preloaderTimeline = gsap.timeline();
+
+            preloaderTimeline
+                .to('.preloader-logo span', {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.4,
+                    stagger: 0.22,
+                    ease: 'expo.out'
+                })
+                .to('.preloader-subtitle', {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.1,
+                    ease: 'expo.out'
+                }, '-=0.3')
+                .to('.preloader-line', {
+                    width: 150,
+                    duration: 1.6,
+                    ease: 'expo.inOut'
+                }, '-=0.2')
+                .to('.preloader', {
+                    yPercent: -100,
+                    duration: 1.4,
+                    ease: 'expo.inOut',
+                    delay: 0.7
+                })
+                .set('.preloader', { display: 'none' })
+                // Hero animations
+                .to('.hero-label', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'expo.out'
+                }, '-=0.5')
+                .to('.hero-title-line span', {
+                    y: 0,
+                    duration: 1.8,
+                    stagger: 0.18,
+                    ease: 'expo.out'
+                }, '-=0.6')
+                .to('.hero-subtitle', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.3,
+                    ease: 'expo.out'
+                }, '-=0.8')
+                .to('.hero-cta', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'expo.out'
+                }, '-=0.6')
+                .to('.hero-scroll', {
+                    opacity: 1,
+                    duration: 1.2
+                }, '-=0.4');
+
+            // Hero parallax on scroll
+            gsap.to('.hero-content', {
+                y: 200,
+                opacity: 0,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+
+            // Section reveals
+            gsap.utils.toArray('.section-header').forEach(header => {
+                gsap.from(header, {
+                    y: 50,
+                    opacity: 0,
+                    duration: 1,
+                    ease: 'expo.out',
+                    scrollTrigger: {
+                        trigger: header,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    }
+                });
+            });
+
+            // Especialidades cards stagger
+            gsap.from('.especialidade-card', {
+                x: 100,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2,
+                ease: 'expo.out',
+                scrollTrigger: {
+                    trigger: '#especialidades',
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+
+            // Team cards animation
+            gsap.from('.team-card', {
+                y: 100,
+                opacity: 0,
+                duration: 1.2,
+                stagger: 0.3,
+                ease: 'expo.out',
+                scrollTrigger: {
+                    trigger: '.team',
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        } else {
+            // Fallback sem GSAP - mostrar conteúdo imediatamente
+            document.querySelector('.preloader')?.style.setProperty('display', 'none');
+            document.querySelectorAll('.hero-label, .hero-subtitle, .hero-cta, .hero-scroll').forEach(el => {
+                el.style.opacity = '1';
+            });
+            document.querySelectorAll('.hero-title-line span').forEach(el => {
+                el.style.transform = 'translateY(0)';
+            });
+            const preloaderSubtitle = document.querySelector('.preloader-subtitle');
+            if (preloaderSubtitle) {
+                preloaderSubtitle.style.opacity = '1';
+                preloaderSubtitle.style.transform = 'translateY(0)';
+            }
+        }
+
+        // ========================================
+        // CUSTOM CURSOR (desktop apenas)
+        // ========================================
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+
+        if (cursor && cursorDot && window.matchMedia('(pointer: fine)').matches) {
+            let mouseX = 0, mouseY = 0;
+            let cursorX = 0, cursorY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+
+                cursorDot.style.left = mouseX + 'px';
+                cursorDot.style.top = mouseY + 'px';
+            });
+
+            function animateCursor() {
+                cursorX += (mouseX - cursorX) * 0.1;
+                cursorY += (mouseY - cursorY) * 0.1;
+
+                cursor.style.left = cursorX + 'px';
+                cursor.style.top = cursorY + 'px';
+
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // Cursor hover effect
+            const hoverElements = document.querySelectorAll('a, button, .team-card, .especialidade-card, .nav-cta');
+            hoverElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+        } else if (cursor && cursorDot) {
+            // Esconder cursor customizado em dispositivos touch
+            cursor.style.display = 'none';
+            cursorDot.style.display = 'none';
+        }
+
+        // ========================================
+        // NAV RETRÁTIL - Esconde ao descer, aparece ao subir
+        // ========================================
+        const nav = document.getElementById('navbar');
+        let lastScroll = 0;
+        let scrollThreshold = 100;
+
+        function updateNavOnScroll() {
+            const currentScroll = window.pageYOffset;
+
+            // Determinar direção do scroll
+            if (currentScroll > lastScroll && currentScroll > scrollThreshold) {
+                // Scroll DESCENDO - esconder nav
+                nav.classList.add('hidden');
+                nav.classList.remove('visible');
+            } else {
+                // Scroll SUBINDO - mostrar nav
+                nav.classList.remove('hidden');
+                nav.classList.add('visible');
+            }
+
+            // Estilo baseado na posição
+            if (currentScroll > 100) {
+                nav.style.mixBlendMode = 'normal';
+                nav.style.background = 'rgba(250, 250, 249, 0.98)';
+                nav.style.backdropFilter = 'blur(20px)';
+                nav.style.webkitBackdropFilter = 'blur(20px)';
+                nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.05)';
+                nav.querySelector('.nav-logo a').style.color = 'var(--color-text)';
+                nav.querySelectorAll('.nav-link').forEach(link => link.style.color = 'var(--color-text)');
+                const navCta = nav.querySelector('.nav-cta');
+                if (navCta) {
+                    navCta.style.borderColor = 'var(--color-text)';
+                    navCta.style.color = 'var(--color-text)';
+                }
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.style.color = 'var(--color-text)';
+                }
+            } else {
+                nav.style.mixBlendMode = 'difference';
+                nav.style.background = 'transparent';
+                nav.style.backdropFilter = 'none';
+                nav.style.webkitBackdropFilter = 'none';
+                nav.style.boxShadow = 'none';
+                nav.querySelector('.nav-logo a').style.color = 'var(--color-white)';
+                nav.querySelectorAll('.nav-link').forEach(link => link.style.color = 'var(--color-white)');
+                const navCta = nav.querySelector('.nav-cta');
+                if (navCta) {
+                    navCta.style.borderColor = 'var(--color-white)';
+                    navCta.style.color = 'var(--color-white)';
+                }
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.style.color = 'var(--color-white)';
+                }
+            }
+
+            lastScroll = currentScroll;
+        }
+
+        // Throttle para performance
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    updateNavOnScroll();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+
+        updateNavOnScroll(); // Executar uma vez no load
+
+        // ========================================
+        // HORIZONTAL SCROLL ESPECIALIDADES
+        // ========================================
+        const track = document.getElementById('especialidadesTrack');
+        const container = document.querySelector('.especialidades-container');
+
+        if (track && container) {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            track.addEventListener('mousedown', (e) => {
+                isDown = true;
+                track.style.cursor = 'grabbing';
+                startX = e.pageX - container.offsetLeft;
+                scrollLeft = container.scrollLeft;
+            });
+
+            track.addEventListener('mouseleave', () => {
+                isDown = false;
+                track.style.cursor = 'grab';
+            });
+
+            track.addEventListener('mouseup', () => {
+                isDown = false;
+                track.style.cursor = 'grab';
+            });
+
+            track.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - container.offsetLeft;
+                const walk = (x - startX) * 2;
+                container.scrollLeft = scrollLeft - walk;
+            });
+
+            // Touch events para mobile
+            track.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].pageX - container.offsetLeft;
+                scrollLeft = container.scrollLeft;
+            }, { passive: true });
+
+            track.addEventListener('touchmove', (e) => {
+                const x = e.touches[0].pageX - container.offsetLeft;
+                const walk = (x - startX) * 2;
+                container.scrollLeft = scrollLeft - walk;
+            }, { passive: true });
+        }
+
+        // ========================================
+        // TEAM CARD TILT EFFECT (desktop)
+        // ========================================
+        const teamCards = document.querySelectorAll('.team-card');
+
+        if (window.matchMedia('(pointer: fine)').matches) {
+            teamCards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+                });
+            });
+        }
+
+        // ========================================
+        // MOUSE PARALLAX HERO (desktop)
+        // ========================================
+        const heroShape = document.querySelector('.hero-bg-shape');
+
+        if (heroShape && typeof gsap !== 'undefined' && window.matchMedia('(pointer: fine)').matches) {
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth - 0.5) * 30;
+                const y = (e.clientY / window.innerHeight - 0.5) * 30;
+
+                gsap.to(heroShape, {
+                    x: x,
+                    y: y,
+                    duration: 1,
+                    ease: 'power2.out'
+                });
+            });
+        }
+
+        // ========================================
+        // PREVENIR CONFLITO COM GSAP SCROLLTRIGGER
+        // ========================================
+        // Desabilitar scroll smoothing do ScrollTrigger durante navegação manual
+        ScrollTrigger.defaults({
+            autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
+        });
+
+        // ========================================
+        // VERIFICAÇÃO DE LINKS EXTERNOS
+        // ========================================
+        // Abrir todos os links externos em nova aba
+        document.querySelectorAll('a[href^="http"]').forEach(link => {
+            if (!link.hasAttribute('target')) {
+                link.setAttribute('target', '_blank');
+                link.setAttribute('rel', 'noopener noreferrer');
+            }
+        });
+
+        // ========================================
+        // CONSOLE WELCOME
+        // ========================================
+        console.log('%c Clarità Odontologia ', 'background: #889EBD; color: white; font-size: 20px; padding: 10px; border-radius: 4px;');
+        console.log('%c Excelência em odontologia no Cambuí ', 'color: #4A5248; font-size: 14px;');
+        console.log('%c Todos os botões estão funcionando! 🦷 ', 'color: #889EBD; font-size: 12px;');
+    </script>
+</body>
+</html>
