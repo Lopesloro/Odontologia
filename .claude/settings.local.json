@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git mv *)"
+      "Bash(git mv *)",
+      "WebFetch(domain:www.claritaodontologia.com.br)",
+      "Bash(curl -k -s \"http://www.claritaodontologia.com.br/\")",
+      "WebFetch(domain:claritaodontologia.com.br)"
     ]
   }
 }
