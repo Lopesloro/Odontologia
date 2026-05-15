@@ -315,9 +315,16 @@
         .hero-right {
             position: relative;
             overflow: hidden;
+            display: grid;
+            grid-template-rows: 1fr 2px 1fr;
         }
 
-        .hero-right img {
+        .hero-photo {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-photo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -326,14 +333,27 @@
             transition: transform 1s var(--ease-expo);
         }
 
-        .hero-right:hover img { transform: scale(1.03); }
+        .hero-photo:hover img { transform: scale(1.03); }
+
+        /* Divisória dourada entre microscópio e laser */
+        .hero-photo-divider {
+            background: linear-gradient(to right,
+                transparent 0%,
+                rgba(196,163,90,0.85) 20%,
+                var(--color-teal) 50%,
+                rgba(196,163,90,0.85) 80%,
+                transparent 100%
+            );
+            box-shadow: 0 0 16px rgba(196,163,90,0.55);
+            z-index: 2;
+        }
 
         /* Funde a foto com o fundo navy do lado esquerdo */
         .hero-right::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(to right, var(--color-navy) 0%, transparent 35%);
+            background: linear-gradient(to right, var(--color-navy) 0%, transparent 12%);
             z-index: 1;
             pointer-events: none;
         }
@@ -356,20 +376,22 @@
         /* Badge flutuante sobre a foto */
         .hero-photo-badge {
             position: absolute;
-            bottom: 2.5rem;
-            right: 2rem;
+            bottom: 1.5rem;
+            right: 1.5rem;
             background: rgba(12,25,41,0.82);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(196,163,90,0.35);
             border-radius: 10px;
-            padding: 1rem 1.4rem;
+            padding: 0.85rem 1.2rem;
             z-index: 3;
             display: flex;
             align-items: center;
             gap: 0.8rem;
             box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
+
+        .hero-photo-badge--laser i { color: #ff5a6e; }
 
         .hero-photo-badge i {
             color: var(--color-teal);
@@ -1410,13 +1432,18 @@
             }
 
             .hero-right {
-                height: 55vw;
-                min-height: 280px;
+                height: auto;
+                min-height: 560px;
                 grid-row: 2;
+                grid-template-rows: 1fr 2px 1fr;
+            }
+
+            .hero-photo {
+                min-height: 280px;
             }
 
             .hero-right::before {
-                background: linear-gradient(to bottom, var(--color-navy) 0%, transparent 30%);
+                background: linear-gradient(to bottom, var(--color-navy) 0%, transparent 10%);
             }
 
             .hero-photo-badge {
@@ -1783,14 +1810,27 @@
             </div>
         </div>
 
-        <!-- Lado direito: foto -->
+        <!-- Lado direito: fotos divididas (microscópio + laser) -->
         <div class="hero-right">
-            <img src="clinica.jpg" alt="Dra. Tatiana realizando procedimento com microscópio — Clarità Odontologia">
-            <div class="hero-photo-badge">
-                <i class="fas fa-microscope"></i>
-                <div class="hero-photo-badge-text">
-                    <span class="hero-photo-badge-title">Microscopia de Alta Precisão</span>
-                    <span class="hero-photo-badge-sub">Endodontia com tecnologia de ponta</span>
+            <div class="hero-photo hero-photo--top">
+                <img src="clinica.jpg" alt="Dra. Tatiana realizando procedimento com microscópio — Clarità Odontologia">
+                <div class="hero-photo-badge">
+                    <i class="fas fa-microscope"></i>
+                    <div class="hero-photo-badge-text">
+                        <span class="hero-photo-badge-title">Microscopia de Alta Precisão</span>
+                        <span class="hero-photo-badge-sub">Endodontia com tecnologia de ponta</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-photo-divider"></div>
+            <div class="hero-photo hero-photo--bottom">
+                <img src="laser.jpg" alt="Procedimento com laser — Clarità Odontologia">
+                <div class="hero-photo-badge hero-photo-badge--laser">
+                    <i class="fas fa-bolt"></i>
+                    <div class="hero-photo-badge-text">
+                        <span class="hero-photo-badge-title">Laserterapia</span>
+                        <span class="hero-photo-badge-sub">Tratamentos modernos e indolores</span>
+                    </div>
                 </div>
             </div>
         </div>
