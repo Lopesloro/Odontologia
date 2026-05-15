@@ -706,6 +706,31 @@
             transform: scaleY(1);
         }
 
+        /* Item travado pelo clique — barra mais larga + ponto indicador */
+        .esp-list-item.locked::after {
+            background: #0C1929;
+            width: 3px;
+        }
+
+        .esp-list-item.locked .esp-list-num {
+            color: #0C1929;
+        }
+
+        .esp-list-item.locked .esp-list-name {
+            color: #0C1929 !important;
+        }
+
+        /* Animação de pulso no clique */
+        @keyframes espPulse {
+            0%   { background: transparent; }
+            30%  { background: rgba(8, 145, 178, 0.08); }
+            100% { background: transparent; }
+        }
+
+        .esp-list-item.esp-click-pulse {
+            animation: espPulse 0.45s ease forwards;
+        }
+
         .esp-list-num {
             font-family: 'DM Sans', sans-serif;
             font-size: 0.68rem;
@@ -895,6 +920,20 @@
             transition: transform 0.8s ease, filter 0.8s ease;
         }
 
+        /* Desktop: mostra as duas na foto sem cortar */
+        @media (min-width: 901px) {
+            .team-duo-photo {
+                background: #1a1f2e;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .team-duo-photo img {
+                object-fit: contain;
+                object-position: center center;
+            }
+        }
+
         .team-duo-photo:hover img {
             transform: scale(1.03);
             filter: grayscale(0%);
@@ -998,7 +1037,7 @@
             top: 130px;
             border-radius: 6px;
             overflow: hidden;
-            background: var(--color-light);
+            background: #D8D2C6;
             aspect-ratio: 3/4;
             max-height: 580px;
         }
@@ -1881,11 +1920,7 @@
         <!-- Painel Dra. Lucia -->
         <div class="spec-panel active" id="panel-lucia" role="tabpanel">
             <div class="spec-photo-wrap">
-                <!-- Substitua o bloco abaixo por <img src="lucia.jpg" alt="Dra. Lucia M. Paz de Oliveira"> quando tiver a foto -->
-                <div class="spec-photo-placeholder">
-                    <i class="fas fa-user"></i>
-                    <span>Foto</span>
-                </div>
+                <img src="ftlucia.jpg" alt="Dra. Lucia M. Paz de Oliveira">
             </div>
 
             <div class="spec-info">
@@ -1931,11 +1966,7 @@
         <!-- Painel Dra. Tatiana -->
         <div class="spec-panel" id="panel-tatiana" role="tabpanel">
             <div class="spec-photo-wrap">
-                <!-- Substitua o bloco abaixo por <img src="tatiana.jpg" alt="Dra. Tatiana Normanha"> quando tiver a foto -->
-                <div class="spec-photo-placeholder">
-                    <i class="fas fa-user"></i>
-                    <span>Foto</span>
-                </div>
+                <img src="tathinova.jpg" alt="Dra. Tatiana Normanha">
             </div>
 
             <div class="spec-info">
@@ -2544,6 +2575,7 @@
         const espBgNum    = document.getElementById('espBgNum');
 
         let currentIndex = 0;
+        let lockedIndex  = -1; // -1 = nenhum clique ainda, hover livre
         let switchTimeout = null;
 
         function switchEspecialidade(index) {
@@ -2567,11 +2599,30 @@
         }
 
         espItems.forEach(item => {
+            // Hover só funciona enquanto nada foi clicado
             item.addEventListener('mouseenter', () => {
-                switchEspecialidade(parseInt(item.dataset.index));
+                if (lockedIndex === -1) {
+                    switchEspecialidade(parseInt(item.dataset.index));
+                }
             });
+
             item.addEventListener('click', () => {
-                switchEspecialidade(parseInt(item.dataset.index));
+                const index = parseInt(item.dataset.index);
+                lockedIndex = index;
+
+                // Atualiza visual
+                espItems.forEach(i => i.classList.remove('locked', 'active'));
+                item.classList.add('active', 'locked');
+
+                // Conteúdo
+                currentIndex = -1; // força a troca mesmo se mesmo index
+                switchEspecialidade(index);
+
+                // Pulso de clique
+                item.classList.add('esp-click-pulse');
+                item.addEventListener('animationend', () => {
+                    item.classList.remove('esp-click-pulse');
+                }, { once: true });
             });
         });
 
